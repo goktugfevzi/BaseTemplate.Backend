@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using BaseTemplate.Entity.Entities;
-using BaseTemplate.Shared.Dtos.User;
+using BaseTemplate.Schema.Entities;
+using BaseTemplate.Schema.Dtos.User;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -1,5 +1,5 @@
 ﻿using BaseTemplate.Dal.Abstractions;
-using BaseTemplate.Entity.Entities;
+using BaseTemplate.Schema.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -1,5 +1,5 @@
 ﻿using BaseTemplate.Dal.EntityConfigurations.Common;
-using BaseTemplate.Entity.Entities;
+using BaseTemplate.Schema.Entities;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
 using System.Collections.Generic;

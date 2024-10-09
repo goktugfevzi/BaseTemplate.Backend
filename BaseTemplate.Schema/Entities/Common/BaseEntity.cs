@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BaseTemplate.Entity.Entities.Common
+namespace BaseTemplate.Schema.Entities.Common
 {
     public class BaseEntity : ICloneable
     {

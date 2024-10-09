@@ -1,6 +1,11 @@
-﻿using BaseTemplate.Business.Cache.Abstraction;
-using BaseTemplate.Entity.Entities.Common;
+﻿using AutoMapper;
+using BaseTemplate.Business.Abstractions;
+using BaseTemplate.Business.Cache.Abstraction;
+using BaseTemplate.Dal.Abstractions;
+using BaseTemplate.Schema.Entities.Common;
 using BaseTemplate.Shared.Dtos.SystemDtos;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using System;
 using System.Collections.Generic;
 using System.Linq;

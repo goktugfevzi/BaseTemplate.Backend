@@ -1,5 +1,5 @@
-﻿using BaseTemplate.Entity.Entities;
-using BaseTemplate.Entity.Entities.Common;
+﻿using BaseTemplate.Schema.Entities;
+using BaseTemplate.Schema.Entities.Common;
 using BaseTemplate.Shared.Abstractions;
 using BaseTemplate.Shared.Dtos.AuditDtos;
 using Microsoft.EntityFrameworkCore;

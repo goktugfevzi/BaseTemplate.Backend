@@ -1,4 +1,4 @@
-﻿using BaseTemplate.Entity.Entities.Common;
+﻿using BaseTemplate.Schema.Entities.Common;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
 using System;

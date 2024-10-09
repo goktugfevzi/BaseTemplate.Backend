@@ -1,5 +1,5 @@
 ﻿using BaseTemplate.Business.Abstractions.Token;
-using BaseTemplate.Entity.Entities;
+using BaseTemplate.Schema.Entities;
 using BaseTemplate.Shared.Dtos.TokenDtos;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;

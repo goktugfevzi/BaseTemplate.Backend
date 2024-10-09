@@ -1,4 +1,4 @@
-﻿using BaseTemplate.Entity.Entities;
+﻿using BaseTemplate.Schema.Entities;
 using BaseTemplate.Shared.Dtos.TokenDtos;
 using System;
 using System.Collections.Generic;

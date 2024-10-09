@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using BaseTemplate.Business.Abstractions;
 using BaseTemplate.Dal.Abstractions;
-using BaseTemplate.Entity.Entities.Common;
+using BaseTemplate.Schema.Entities.Common;
 using BaseTemplate.Shared.Dtos.SystemDtos;
 using BaseTemplate.Shared.Extensions;
 using Microsoft.EntityFrameworkCore;

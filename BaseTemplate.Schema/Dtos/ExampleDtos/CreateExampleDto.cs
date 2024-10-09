@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BaseTemplate.Shared.Dtos.ExampleDtos
+namespace BaseTemplate.Schema.Dtos.ExampleDtos
 {
     public class CreateExampleDto
     {

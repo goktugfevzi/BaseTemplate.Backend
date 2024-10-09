@@ -1,5 +1,5 @@
 ﻿using BaseTemplate.Dal.Abstractions;
-using BaseTemplate.Entity.Entities.Common;
+using BaseTemplate.Schema.Entities.Common;
 using BaseTemplate.Shared.Dtos.SystemDtos;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore;

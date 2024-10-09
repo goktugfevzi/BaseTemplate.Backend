@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BaseTemplate.Shared.Dtos.User
+namespace BaseTemplate.Schema.Dtos.User
 {
     public class UserInfoDto
     {

@@ -1,11 +1,11 @@
-﻿using BaseTemplate.Entity.Entities;
+﻿using BaseTemplate.Schema.Entities;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace BaseTemplate.Shared.Dtos.AuditDtos
 {

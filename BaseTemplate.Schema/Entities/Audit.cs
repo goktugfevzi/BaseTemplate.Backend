@@ -1,4 +1,4 @@
-﻿namespace BaseTemplate.Entity.Entities
+﻿namespace BaseTemplate.Schema.Entities
 {
     public class Audit
     {

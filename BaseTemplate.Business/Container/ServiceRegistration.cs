@@ -3,7 +3,7 @@ using BaseTemplate.Business.Services;
 using BaseTemplate.Business.ValidationRules.FluentValidation;
 using BaseTemplate.Dal.Abstractions;
 using BaseTemplate.Dal.Conrete;
-using BaseTemplate.Shared.Dtos.ExampleDtos;
+using BaseTemplate.Schema.Dtos.ExampleDtos;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using System;

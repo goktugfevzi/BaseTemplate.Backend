@@ -1,11 +1,11 @@
-﻿using BaseTemplate.Entity.Entities.Common;
+﻿using BaseTemplate.Schema.Entities.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BaseTemplate.Entity.Entities
+namespace BaseTemplate.Schema.Entities
 {
     public class User : BaseEntity
     {
