@@ -15,7 +15,7 @@ namespace BaseTemplate.Dal.Container
     {
         public static void RegisterRepositoryServices(this IServiceCollection services, IConfiguration configManager)
         {
-            services.AddDbContext<ExampleContext>(o => o.UseSqlServer(configManager.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<ExampleContext>(o => o.UseSqlServer(configManager.GetConnectionString("Sql")));
 
         }
     }

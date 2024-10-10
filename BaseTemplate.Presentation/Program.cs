@@ -1,51 +1,39 @@
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using BaseTemplate.Business.Container;
+using BaseTemplate.Business.ValidationRules.FluentValidation;
 using BaseTemplate.Dal.Container;
-using BaseTemplate.Presentation.Configurations;
 using BaseTemplate.Presentation.Middlewares;
 using BaseTemplate.Presentation.Modules;
-using FluentValidation.AspNetCore;
+using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.IdentityModel.Tokens;
-using Serilog;
+using Microsoft.OpenApi.Models;
 using Serilog.Context;
-using Serilog.Core;
+using System.Reflection;
 using System.Security.Claims;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-//PROGRAM YAZARAK YAZILAN TUM FLUENT VALIDATIONLARI VE MAPPER PROFILE LERI EKLEMIS OLDUK
-builder.Services.AddControllers()
-    .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<Program>());
-
-builder.Services.AddAutoMapper(typeof(Program));
-//PROGRAM YAZARAK YAZILAN TUM FLUENT VALIDATIONLARI VE MAPPER PROFILE LERI EKLEMIS OLDUK
-
-builder.Services.Configure<ApiBehaviorOptions>(o =>
-{
-    o.SuppressModelStateInvalidFilter = true;
-});
-builder.Services.RegisterRepositoryServices(builder.Configuration);
+builder.Services.AddControllers();
+//builder.Services.AddValidatorsFromAssemblyContaining<ExampleValidator>();
+builder.Services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 builder.Services.RegisterBusinessServices();
+builder.Services.RegisterRepositoryServices(builder.Configuration);
 builder.Services.AddMemoryCache();
-
-
-
-//sorulacak
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddHealthChecks();
 builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
-builder.Services.Configure<ApiBehaviorOptions>(o =>
-{
-    o.SuppressModelStateInvalidFilter = true;
-});
 builder.Host.ConfigureContainer<ContainerBuilder>(containerBuilder => containerBuilder.RegisterModule(new RepoServiceModule()));
 
-//sorulacak
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.Configure<ApiBehaviorOptions>(o =>
+{
+    o.SuppressModelStateInvalidFilter = true;
+});
+
 builder.Services.AddRateLimiter(o =>
 {
     o.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
@@ -60,23 +48,23 @@ builder.Services.AddRateLimiter(o =>
         });
 });
 
-builder.Services.AddHttpLogging(l =>
-{
-    l.LoggingFields = Microsoft.AspNetCore.HttpLogging.HttpLoggingFields.All;
-    l.RequestHeaders.Add("sec-ch-ua");
-    l.MediaTypeOptions.AddText("application/javascript");
-    l.RequestBodyLogLimit = 4096;
-    l.ResponseBodyLogLimit = 4096;
-});
-Logger log = new LoggerConfiguration()
-    .WriteTo.Console(restrictedToMinimumLevel: Serilog.Events.LogEventLevel.Information)
-    .WriteTo.File("logs/log.txt", rollingInterval: RollingInterval.Hour)
-    .WriteTo.MSSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"), sinkOptions: SerilogConfiguration.SinkOptions, columnOptions: SerilogConfiguration.ColumnOptions)
-    .Enrich.FromLogContext()
-    .MinimumLevel.Warning()
-    .CreateLogger();
+//builder.Services.AddHttpLogging(l =>
+//{
+//    l.LoggingFields = Microsoft.AspNetCore.HttpLogging.HttpLoggingFields.All;
+//    l.RequestHeaders.Add("sec-ch-ua");
+//    l.MediaTypeOptions.AddText("application/javascript");
+//    l.RequestBodyLogLimit = 4096;
+//    l.ResponseBodyLogLimit = 4096;
+//});
+//Logger log = new LoggerConfiguration()
+//    .WriteTo.Console(restrictedToMinimumLevel: Serilog.Events.LogEventLevel.Information)
+//    .WriteTo.File("logs/log.txt", rollingInterval: RollingInterval.Hour)
+//    .WriteTo.MSSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"), sinkOptions: SerilogConfiguration.SinkOptions, columnOptions: SerilogConfiguration.ColumnOptions)
+//    .Enrich.FromLogContext()
+//    .MinimumLevel.Warning()
+//    .CreateLogger();
 
-builder.Host.UseSerilog(log);
+//builder.Host.UseSerilog(log);
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(opt =>
 {
@@ -95,10 +83,34 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
         NameClaimType = ClaimTypes.Name
     };
 });
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "BaseTemplate API", Version = "v1", Description = "BaseTemplate APIs" });
+    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
+    {
+        Name = "Authorization",
+        Type = SecuritySchemeType.Http,
+        Scheme = "Bearer",
+        BearerFormat = "JWT",
+        In = ParameterLocation.Header,
+        Description = "Please enter only token"
+    });
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement()
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id= "Bearer"
+                }
+            },
+            Array.Empty<string>()
+        }
 
-builder.Services.AddHealthChecks();
-
-
+    });
+});
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
