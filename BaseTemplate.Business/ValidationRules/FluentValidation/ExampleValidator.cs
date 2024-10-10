@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace BaseTemplate.Business.ValidationRules.FluentValidation
 {
-    public class ExampleValidator : AbstractValidator<CreateExampleDto>
+    public class ExampleValidator : AbstractValidator<CreateExampleRequest>
     {
         public ExampleValidator()
         {

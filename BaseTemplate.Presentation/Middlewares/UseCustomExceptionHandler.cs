@@ -22,7 +22,7 @@ namespace BaseTemplate.Presentation.Middlewares
                         _ => 500
                     };
 
-                    var response = ServiceResult<NoContent>.Fail(statusCode, exceptionFeature.Error.Message);
+                    var response = ServiceResult<NoContentDto>.Fail(statusCode, exceptionFeature.Error.Message);
                     await context.Response.WriteAsync(JsonSerializer.Serialize(response));
 
                 });

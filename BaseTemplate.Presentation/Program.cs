@@ -15,6 +15,7 @@ using Serilog.Context;
 using Serilog.Core;
 using System.Security.Claims;
 using System.Text;
+
 var builder = WebApplication.CreateBuilder(args);
 
 //PROGRAM YAZARAK YAZILAN TUM FLUENT VALIDATIONLARI VE MAPPER PROFILE LERI EKLEMIS OLDUK
@@ -70,8 +71,7 @@ builder.Services.AddHttpLogging(l =>
 Logger log = new LoggerConfiguration()
     .WriteTo.Console(restrictedToMinimumLevel: Serilog.Events.LogEventLevel.Information)
     .WriteTo.File("logs/log.txt", rollingInterval: RollingInterval.Hour)
-    .WriteTo.MSSqlServer(builder.Configuration.GetConnectionString("Sql"), sinkOptions: SerilogConfiguration.SinkOptions, columnOptions: SerilogConfiguration.ColumnOptions)
-    //.WriteTo.PostgreSQL(builder.Configuration.GetConnectionString("PostgreSQL"), "Logs", needAutoCreateTable: true)
+    .WriteTo.MSSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"), sinkOptions: SerilogConfiguration.SinkOptions, columnOptions: SerilogConfiguration.ColumnOptions)
     .Enrich.FromLogContext()
     .MinimumLevel.Warning()
     .CreateLogger();

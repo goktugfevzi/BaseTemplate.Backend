@@ -13,7 +13,7 @@ namespace BaseTemplate.Business.Mapping
     {
         public ExampleProfile()
         {
-            CreateMap<Example, CreateExampleDto>().ReverseMap();
+            CreateMap<Example, CreateExampleRequest>().ReverseMap();
         }
     }
 }

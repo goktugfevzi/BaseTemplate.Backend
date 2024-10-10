@@ -19,10 +19,10 @@ namespace BaseTemplate.Business.Container
     {
         public static void RegisterBusinessServices(this IServiceCollection services)
         {
-            services.AddAutoMapper(Assembly.GetExecutingAssembly());
+            //services.AddAutoMapper(Assembly.GetExecutingAssembly());
             services.AddScoped<IExampleService, ExampleService>();
             services.AddScoped<IExampleRepository, ExampleRepository>();
-            services.AddTransient<IValidator<CreateExampleDto>, ExampleValidator>();
+            services.AddTransient<IValidator<CreateExampleRequest>, ExampleValidator>();
 
         }
     }

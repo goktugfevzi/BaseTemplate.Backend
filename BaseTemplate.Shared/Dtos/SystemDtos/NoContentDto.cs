@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BaseTemplate.Shared.Dtos.SystemDtos
 {
-    public class NoContent
+    public class NoContentDto
     {
     }
 }
