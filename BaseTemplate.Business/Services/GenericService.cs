@@ -169,7 +169,15 @@ namespace BaseTemplate.Business.Services
             {
                 var entity = await genericRepository.SetToPassiveAsync(id);
                 await genericRepository.SaveAsync();
-                var result = isEmptyResponse.Value ? Activator.CreateInstance<Tres>() : mapper.Map<Tres>(entity);
+                Tres result;
+                if (typeof(Tres) == typeof(NoContentDto))
+                {
+                    result = Activator.CreateInstance<Tres>();
+                }
+                else
+                {
+                    result = isEmptyResponse.Value ? Activator.CreateInstance<Tres>() : mapper.Map<Tres>(entity);
+                }
                 return ServiceResult<Tres>.Success((int)HttpStatusCode.OK, result);
             }
             catch (Exception e)

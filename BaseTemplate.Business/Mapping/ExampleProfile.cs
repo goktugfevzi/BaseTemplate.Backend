@@ -14,6 +14,8 @@ namespace BaseTemplate.Business.Mapping
         public ExampleProfile()
         {
             CreateMap<Example, CreateExampleRequest>().ReverseMap();
+            CreateMap<Example, UpdateExampleRequest>().ReverseMap();
+            CreateMap<Example, GetExampleResponse>().ReverseMap();
         }
     }
 }

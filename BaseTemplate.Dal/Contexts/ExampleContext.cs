@@ -18,8 +18,8 @@ namespace BaseTemplate.Dal.Contexts
 
         public ExampleContext(DbContextOptions<ExampleContext> options) : base(options) { }
         public DbSet<Audit> Audits { get; set; }
-
         public DbSet<Example> Examples { get; set; }
+        public DbSet<User> Users { get; set; }
 
         private async Task BeforeSaveChanges()
         {

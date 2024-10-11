@@ -22,28 +22,28 @@ namespace BaseTemplate.Presentation.Controllers
         [NoNeedAuthorization]
         public async Task<IActionResult> Example()
         {
-            return CreateActionResult(await _exampleService.GetAllAsync<GetExampleResponse>());
+            return CreateActionResult(await _exampleService.GetAllAsync<GetExampleResponse>(x=>x.IsActive));
         }
-        [HttpGet("id")]
+        [HttpGet("{id}")]
         [NoNeedAuthorization]
-        public async Task<IActionResult> Example([FromQuery] Guid id)
+        public async Task<IActionResult> Example(Guid id)
         {
-            return CreateActionResult(await _exampleService.GetByIdAsync<GetExampleResponse>(id.ToString()));
+            return CreateActionResult(await _exampleService.GetByIdAsync(id.ToString()));
         }
         [HttpPost]
         public async Task<IActionResult> Example([FromBody] CreateExampleRequest model)
         {
-            return CreateActionResult(await _exampleService.AddAsync<CreateExampleRequest, ServiceResult<NoContentDto>>(model, true));
+            return CreateActionResult(await _exampleService.AddAsync<CreateExampleRequest, NoContentDto>(model, true));
         }
         [HttpPut]
         public async Task<IActionResult> Example([FromBody] UpdateExampleRequest model)
         {
-            return CreateActionResult(await _exampleService.UpdateAsync<UpdateExampleRequest, ServiceResult<NoContentDto>>(model, model.Id.ToString(), true));
+            return CreateActionResult(await _exampleService.UpdateAsync<UpdateExampleRequest, NoContentDto>(model, model.Id.ToString(), true));
         }
         [HttpDelete("{id}")]
         public async Task<IActionResult> Example([FromRoute] string id)
         {
-            return CreateActionResult(await _exampleService.RemoveAsync<ServiceResult<NoContentDto>>(id.ToString()));
+            return CreateActionResult(await _exampleService.SetToPassiveAsync<NoContentDto>(id));
         }
     }
 }

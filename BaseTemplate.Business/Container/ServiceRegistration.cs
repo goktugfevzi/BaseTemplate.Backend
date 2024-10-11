@@ -20,8 +20,8 @@ namespace BaseTemplate.Business.Container
         public static void RegisterBusinessServices(this IServiceCollection services)
         {
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
-            //services.AddTransient<IValidator<CreateExampleRequest>, ExampleValidator>();
-         
+            services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+            services.AddMemoryCache();
         }
     }
 }

@@ -19,11 +19,8 @@ using System.Text;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
-//builder.Services.AddValidatorsFromAssemblyContaining<ExampleValidator>();
-builder.Services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 builder.Services.RegisterBusinessServices();
 builder.Services.RegisterRepositoryServices(builder.Configuration);
-builder.Services.AddMemoryCache();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddHealthChecks();
 builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
