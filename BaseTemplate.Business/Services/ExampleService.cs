@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using BaseTemplate.Business.Abstractions;
 using BaseTemplate.Business.Cache.Service;
-using BaseTemplate.Dal.Abstractions;
-using BaseTemplate.Schema.Entities;
+using BaseTemplate.Repository.Abstractions;
+using BaseTemplate.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;

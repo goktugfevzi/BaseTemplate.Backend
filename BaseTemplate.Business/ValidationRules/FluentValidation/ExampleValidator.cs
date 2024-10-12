@@ -1,4 +1,4 @@
-﻿using BaseTemplate.Schema.Dtos.ExampleDtos;
+﻿using BaseTemplate.Domain.Dtos.ExampleDtos;
 using FluentValidation;
 using System;
 using System.Collections.Generic;

@@ -1,9 +1,9 @@
 ﻿using BaseTemplate.Business.Abstractions;
 using BaseTemplate.Business.Services;
 using BaseTemplate.Business.ValidationRules.FluentValidation;
-using BaseTemplate.Dal.Abstractions;
-using BaseTemplate.Dal.Conrete;
-using BaseTemplate.Schema.Dtos.ExampleDtos;
+using BaseTemplate.Repository.Abstractions;
+using BaseTemplate.Repository.Conrete;
+using BaseTemplate.Domain.Dtos.ExampleDtos;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using System;

@@ -1,11 +1,11 @@
 ﻿using BaseTemplate.Business.Abstractions.Token;
 using BaseTemplate.Business.Abstractions;
 using BaseTemplate.Business.Services;
-using BaseTemplate.Dal.Abstractions;
-using BaseTemplate.Dal.Conrete;
+using BaseTemplate.Repository.Abstractions;
+using BaseTemplate.Repository.Conrete;
 using BaseTemplate.Shared.Services;
 using System.Reflection;
-using BaseTemplate.Dal.Contexts;
+using BaseTemplate.Repository.Contexts;
 using BaseTemplate.Business.Services.Token;
 using Autofac;
 

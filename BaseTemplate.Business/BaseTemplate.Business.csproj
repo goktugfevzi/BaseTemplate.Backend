@@ -7,14 +7,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\BaseTemplate.Dal\BaseTemplate.Dal.csproj" />
-    <ProjectReference Include="..\BaseTemplate.Schema\BaseTemplate.Schema.csproj" />
+    <ProjectReference Include="..\BaseTemplate.Repository\BaseTemplate.Repository.csproj" />
+    <ProjectReference Include="..\BaseTemplate.Domain\BaseTemplate.Domain.csproj" />
     <ProjectReference Include="..\BaseTemplate.Shared\BaseTemplate.Shared.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="13.0.1" />
     <PackageReference Include="FluentValidation" Version="11.10.0" />
+    <PackageReference Include="AutoMapper" Version="13.0.1" />
     <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.10.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.2" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.1.1" />

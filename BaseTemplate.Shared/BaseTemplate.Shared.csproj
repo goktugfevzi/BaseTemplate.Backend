@@ -14,8 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\BaseTemplate.Schema\BaseTemplate.Schema.csproj" />
-    <ProjectReference Include="..\BaseTemplate.Schema\BaseTemplate.Schema.csproj" />
+    <ProjectReference Include="..\BaseTemplate.Domain\BaseTemplate.Domain.csproj" />
   </ItemGroup>
 
 </Project>

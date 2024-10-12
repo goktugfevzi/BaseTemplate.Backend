@@ -1,7 +1,7 @@
 ﻿using BaseTemplate.Business.Abstractions;
 using BaseTemplate.Presentation.Attributes;
 using BaseTemplate.Presentation.Controllers.Common;
-using BaseTemplate.Schema.Dtos.ExampleDtos;
+using BaseTemplate.Domain.Dtos.ExampleDtos;
 using BaseTemplate.Shared.Dtos.SystemDtos;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

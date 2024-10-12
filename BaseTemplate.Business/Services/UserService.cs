@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using BaseTemplate.Business.Abstractions;
-using BaseTemplate.Dal.Abstractions;
-using BaseTemplate.Schema.Entities;
+using BaseTemplate.Repository.Abstractions;
+using BaseTemplate.Domain.Entities;
 using BaseTemplate.Shared.Dtos.TokenDtos;
 using Microsoft.Extensions.Configuration;
 using System;

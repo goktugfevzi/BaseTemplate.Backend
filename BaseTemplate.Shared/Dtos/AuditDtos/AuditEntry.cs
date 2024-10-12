@@ -1,4 +1,4 @@
-﻿using BaseTemplate.Schema.Entities;
+﻿using BaseTemplate.Domain.Entities;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System;
 using System.Collections.Generic;

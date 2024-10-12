@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BaseTemplate.Business.Abstractions
+namespace BaseTemplate.Repository.Abstractions
 {
-    public interface IExampleService :IGenericService<Example>
+    public interface IUserRepository : IGenericRepository<User>
     {
     }
 }

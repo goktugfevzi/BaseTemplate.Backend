@@ -2,7 +2,7 @@ using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using BaseTemplate.Business.Container;
 using BaseTemplate.Business.ValidationRules.FluentValidation;
-using BaseTemplate.Dal.Container;
+using BaseTemplate.Repository.Container;
 using BaseTemplate.Presentation.Middlewares;
 using BaseTemplate.Presentation.Modules;
 using FluentValidation;
