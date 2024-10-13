@@ -17,6 +17,7 @@ namespace BaseTemplate.Repository.Container
         {
             services.AddDbContext<ExampleContext>(o => o.UseSqlServer(configManager.GetConnectionString("Sql")));
 
+
         }
     }
 }

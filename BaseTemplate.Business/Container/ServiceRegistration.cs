@@ -20,6 +20,7 @@ namespace BaseTemplate.Business.Container
         public static void RegisterBusinessServices(this IServiceCollection services)
         {
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
+
             services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
             services.AddMemoryCache();
         }

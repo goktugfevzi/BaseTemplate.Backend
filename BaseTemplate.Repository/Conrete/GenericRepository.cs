@@ -17,7 +17,6 @@ namespace BaseTemplate.Repository.Conrete
     public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
     {
         protected readonly ExampleContext db;
-        private ExampleRepository db1;
 
         public DbSet<T> Table => db.Set<T>();
 
@@ -25,11 +24,6 @@ namespace BaseTemplate.Repository.Conrete
         public GenericRepository(ExampleContext db)
         {
             this.db = db;
-        }
-
-        public GenericRepository(ExampleRepository db1)
-        {
-            this.db1 = db1;
         }
 
         public virtual async Task<T> AddAsync(T model)

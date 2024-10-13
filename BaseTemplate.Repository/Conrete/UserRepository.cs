@@ -5,12 +5,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BaseTemplate.Repository.Contexts;
 
 namespace BaseTemplate.Repository.Conrete
 {
-    internal class UserRepository : GenericRepository<User>, IUserRepository
+    public class UserRepository : GenericRepository<User>, IUserRepository
     {
-        public UserRepository(ExampleRepository db) : base(db)
+        public UserRepository(ExampleContext db) : base(db)
         {
 
         }

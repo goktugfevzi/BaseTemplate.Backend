@@ -15,6 +15,8 @@ using Serilog.Context;
 using System.Reflection;
 using System.Security.Claims;
 using System.Text;
+using Autofac.Core;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,6 +27,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddHealthChecks();
 builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
 builder.Host.ConfigureContainer<ContainerBuilder>(containerBuilder => containerBuilder.RegisterModule(new RepoServiceModule()));
+
+
 
 builder.Services.Configure<ApiBehaviorOptions>(o =>
 {
