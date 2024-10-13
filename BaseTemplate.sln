@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BaseTemplate.Repository", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BaseTemplate.Presentation", "BaseTemplate.Presentation\BaseTemplate.Presentation.csproj", "{A9A38B02-57C0-4DAB-B707-9F610EB2F13F}"
 EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{B1C44347-8606-4B5C-BAB2-0B68F28E461C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{A9A38B02-57C0-4DAB-B707-9F610EB2F13F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A9A38B02-57C0-4DAB-B707-9F610EB2F13F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A9A38B02-57C0-4DAB-B707-9F610EB2F13F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B1C44347-8606-4B5C-BAB2-0B68F28E461C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B1C44347-8606-4B5C-BAB2-0B68F28E461C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B1C44347-8606-4B5C-BAB2-0B68F28E461C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B1C44347-8606-4B5C-BAB2-0B68F28E461C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

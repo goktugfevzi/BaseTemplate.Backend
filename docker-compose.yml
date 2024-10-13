@@ -1,0 +1,27 @@
+version: '3.4'
+
+services:
+  backend:
+    image: backend
+    container_name: backend
+    build:
+      context: ./BaseTemplate.Presentation/
+      dockerfile: Dockerfile
+    environment:
+      - ConnectionStrings__Sql=Server=mssql;Database=BaseTemplate;User Id=SA;Password=1Q2w3e4r5t6y!!;TrustServerCertificate=True
+    ports:
+      - "8080:8080"
+      - "8081:8081"
+    depends_on:
+      - mssql
+
+  mssql:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: mssql 
+    environment:
+       ACCEPT_EULA: "Y"   
+       MSSQL_SA_PASSWORD: "1Q2w3e4r5t6y!!"
+    ports:
+      - "1433:1433"
+    volumes:
+      - ./db/data:/var/opt/mssql/data

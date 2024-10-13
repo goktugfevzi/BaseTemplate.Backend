@@ -17,6 +17,8 @@ using System.Security.Claims;
 using System.Text;
 using Autofac.Core;
 using Microsoft.Extensions.Options;
+using BaseTemplate.Repository.Contexts;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -113,9 +115,19 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    try
+    {
+        var context = services.GetRequiredService<ExampleContext>();
+        context.Database.Migrate();
+    }
+    catch (Exception ex)
+    {  // Loglama veya hata yönetimi
+    }
+}
+if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
