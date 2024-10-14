@@ -28,8 +28,15 @@ namespace BaseTemplate.Shared.Services
 
         public string GetCurrentUserIpAddress()
         {
+            var context = httpContextAccessor.HttpContext;
+            if (context == null)
+            {
+                return "HttpContext mevcut değil";
+            }
 
-            return httpContextAccessor.HttpContext?.Connection?.RemoteIpAddress?.ToString();
+            var remoteIpAddress = context.Connection?.RemoteIpAddress?.ToString();
+            return remoteIpAddress ?? "IP adresi alınamadı";
         }
+
     }
 }

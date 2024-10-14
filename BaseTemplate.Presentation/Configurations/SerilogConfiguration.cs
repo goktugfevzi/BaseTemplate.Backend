@@ -1,38 +1,41 @@
-﻿using Serilog.Sinks.MSSqlServer;
+﻿using Serilog;
+using Serilog.Sinks.Elasticsearch;
+using Microsoft.Extensions.Configuration;
+using System;
 
 namespace BaseTemplate.Presentation.Configurations
 {
     public class SerilogConfiguration
     {
-        public static MSSqlServerSinkOptions SinkOptions
-        {
-            get
-            {
-                var sinkOpts = new MSSqlServerSinkOptions();
-                sinkOpts.TableName = "Logs";
-                sinkOpts.AutoCreateSqlTable = true;
+        private readonly IConfiguration _configuration;
 
-                return sinkOpts;
-            }
+        public SerilogConfiguration(IConfiguration configuration)
+        {
+            _configuration = configuration;
         }
-        public static ColumnOptions ColumnOptions
+
+        public ElasticsearchSinkOptions ElasticsearchOptions
         {
             get
             {
-                var columnOpts = new ColumnOptions();
-                //columnOpts.Store.Remove(StandardColumn.Properties);
-                columnOpts.Store.Add(StandardColumn.LogEvent);
-                //columnOpts.LogEvent.DataLength = 2048;
-                columnOpts.PrimaryKey = columnOpts.Id;
-                columnOpts.TimeStamp.NonClusteredIndex = true;
-                columnOpts.AdditionalColumns = new List<SqlColumn>
+                var uri = _configuration["ElasticsSearchSettings:Url"];
+                return new ElasticsearchSinkOptions(new Uri(uri))
                 {
-                    new SqlColumn("UserId",System.Data.SqlDbType.UniqueIdentifier,true),
-                    new SqlColumn("UserName",System.Data.SqlDbType.NVarChar,true,150),
+                    AutoRegisterTemplate = true,
+                    IndexFormat = $"logstash-{DateTime.UtcNow:yyyy.MM.dd}",
+                    NumberOfShards = 2,
+                    NumberOfReplicas = 1
                 };
-                return columnOpts;
             }
         }
 
+        public LoggerConfiguration ConfigureLogging()
+        {
+            return new LoggerConfiguration()
+                .WriteTo.Console(restrictedToMinimumLevel: Serilog.Events.LogEventLevel.Information)
+                .WriteTo.Elasticsearch(ElasticsearchOptions)
+                .Enrich.FromLogContext()
+                .MinimumLevel.Warning();
+        }
     }
 }

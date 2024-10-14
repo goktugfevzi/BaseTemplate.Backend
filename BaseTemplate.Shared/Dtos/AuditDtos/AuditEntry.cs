@@ -24,7 +24,7 @@ namespace BaseTemplate.Shared.Dtos.AuditDtos
         public Dictionary<string, object> NewValues { get; } = new Dictionary<string, object>();
         public AuditType AuditType { get; set; }
         public List<string> ChangedColumns { get; } = new List<string>();
-        public string IpAdress { get; set; }
+        public string IpAddress { get; set; }
 
         public Audit ToAudit()
         {
@@ -37,7 +37,7 @@ namespace BaseTemplate.Shared.Dtos.AuditDtos
             audit.OldValues = OldValues.Count == 0 ? "null" : JsonConvert.SerializeObject(OldValues);
             audit.NewValues = NewValues.Count == 0 ? "null" : JsonConvert.SerializeObject(NewValues);
             audit.AffectedColumns = ChangedColumns.Count == 0 ? "null" : JsonConvert.SerializeObject(ChangedColumns);
-            audit.IpAdress = IpAdress;
+            audit.IpAddress = IpAddress;
             return audit;
         }
     }

@@ -1,9 +1,11 @@
 version: '3.4'
 
 services:
-  backend:
-    image: backend
-    container_name: backend
+  basetemplate.presentation:
+  # backend:
+    image: basetemplate.presentation
+    # image: backend
+    # container_name: backend
     build:
       context: ./BaseTemplate.Presentation/
       dockerfile: Dockerfile
@@ -14,6 +16,7 @@ services:
       - "8081:8081"
     depends_on:
       - mssql
+      - elasticsearch 
 
   mssql:
     image: mcr.microsoft.com/mssql/server:2022-latest
@@ -25,3 +28,36 @@ services:
       - "1433:1433"
     volumes:
       - ./db/data:/var/opt/mssql/data
+ 
+
+  elasticsearch:
+    container_name: elasticsearch
+    image: elasticsearch:8.15.0
+    ports:
+      - "9200:9200"
+    volumes:
+      - elasticsearch-data:/usr/share/elasticsearch/data
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+    networks:
+      - elk
+
+  kibana:
+    container_name: kibana
+    image: kibana:8.15.0
+    ports:
+      - "5601:5601"
+    depends_on:
+      - elasticsearch
+    environment:
+      - ELASTICSEARCH_URL=http://elasticsearch:9200
+    networks:
+      - elk
+
+networks:
+  elk:
+    driver: bridge
+
+volumes:
+  elasticsearch-data:

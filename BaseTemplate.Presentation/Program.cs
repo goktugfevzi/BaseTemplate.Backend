@@ -19,6 +19,15 @@ using Autofac.Core;
 using Microsoft.Extensions.Options;
 using BaseTemplate.Repository.Contexts;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
+using System.Configuration;
+using System;
+using Serilog.Sinks.Elasticsearch;
+using BaseTemplate.Presentation.Configurations;
+using Serilog.Core;
+using BaseTemplate.Repository.Elastic.Configuration;
+using BaseTemplate.Shared.Abstractions;
+using BaseTemplate.Shared.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,8 +36,10 @@ builder.Services.RegisterBusinessServices();
 builder.Services.RegisterRepositoryServices(builder.Configuration);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddHealthChecks();
+builder.Services.AddHttpContextAccessor();
 builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
 builder.Host.ConfigureContainer<ContainerBuilder>(containerBuilder => containerBuilder.RegisterModule(new RepoServiceModule()));
+builder.Services.AddScoped<IUserClaimService, UserClaimService>();
 
 
 
@@ -50,24 +61,11 @@ builder.Services.AddRateLimiter(o =>
             c.QueueProcessingOrder = System.Threading.RateLimiting.QueueProcessingOrder.OldestFirst;
         });
 });
+builder.Services.Configure<ElasticSettings>(builder.Configuration.GetSection("Elasticsearch"));
+var serilogConfig = new SerilogConfiguration(builder.Configuration);
+Logger log = serilogConfig.ConfigureLogging().CreateLogger();
 
-//builder.Services.AddHttpLogging(l =>
-//{
-//    l.LoggingFields = Microsoft.AspNetCore.HttpLogging.HttpLoggingFields.All;
-//    l.RequestHeaders.Add("sec-ch-ua");
-//    l.MediaTypeOptions.AddText("application/javascript");
-//    l.RequestBodyLogLimit = 4096;
-//    l.ResponseBodyLogLimit = 4096;
-//});
-//Logger log = new LoggerConfiguration()
-//    .WriteTo.Console(restrictedToMinimumLevel: Serilog.Events.LogEventLevel.Information)
-//    .WriteTo.File("logs/log.txt", rollingInterval: RollingInterval.Hour)
-//    .WriteTo.MSSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"), sinkOptions: SerilogConfiguration.SinkOptions, columnOptions: SerilogConfiguration.ColumnOptions)
-//    .Enrich.FromLogContext()
-//    .MinimumLevel.Warning()
-//    .CreateLogger();
-
-//builder.Host.UseSerilog(log);
+builder.Host.UseSerilog(log);
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(opt =>
 {
@@ -157,6 +155,8 @@ app.Use(async (context, next) =>
         LogContext.PushProperty("UserId", userId);
     await next();
 });
+
+app.UseSerilogRequestLogging();
 
 app.MapControllers();
 
