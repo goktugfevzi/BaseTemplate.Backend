@@ -22,7 +22,7 @@ namespace BaseTemplate.Presentation.Configurations
                 return new ElasticsearchSinkOptions(new Uri(uri))
                 {
                     AutoRegisterTemplate = true,
-                    IndexFormat = $"logstash-{DateTime.UtcNow:yyyy.MM.dd}",
+                    IndexFormat = $"Serilog-{DateTime.UtcNow:yyyy.MM.dd}",
                     NumberOfShards = 2,
                     NumberOfReplicas = 1
                 };

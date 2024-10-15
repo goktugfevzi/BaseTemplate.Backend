@@ -39,8 +39,6 @@ builder.Services.AddHealthChecks();
 builder.Services.AddHttpContextAccessor();
 builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
 builder.Host.ConfigureContainer<ContainerBuilder>(containerBuilder => containerBuilder.RegisterModule(new RepoServiceModule()));
-builder.Services.AddScoped<IUserClaimService, UserClaimService>();
-
 
 
 builder.Services.Configure<ApiBehaviorOptions>(o =>

@@ -17,19 +17,16 @@ namespace BaseTemplate.Repository.Contexts
     public class ExampleContext : DbContext
     {
         private readonly IUserClaimService userClaimService;
+        private readonly IElasticService elasticService;
+        private readonly IHttpContextAccessor httpContextAccessor;
 
-        public ExampleContext(IUserClaimService userClaimService, IElasticService elasticService, IHttpContextAccessor httpContextAccessor)
+
+        public ExampleContext(DbContextOptions<ExampleContext> options, IUserClaimService userClaimService, IElasticService elasticService, IHttpContextAccessor httpContextAccessor) : base(options)
         {
             this.userClaimService = userClaimService;
             this.elasticService = elasticService;
             this.httpContextAccessor = httpContextAccessor;
         }
-
-        private readonly IElasticService elasticService;
-        private readonly IHttpContextAccessor httpContextAccessor;
-
-
-        public ExampleContext(DbContextOptions<ExampleContext> options) : base(options) { }
         public DbSet<Example> Examples { get; set; }
         public DbSet<User> Users { get; set; }
 
@@ -40,19 +37,10 @@ namespace BaseTemplate.Repository.Contexts
             var auditEntries = new List<AuditEntry>();
             foreach (var entry in ChangeTracker.Entries())
             {
-                if (entry.Entity is Audit || entry.State == EntityState.Detached || entry.State == EntityState.Unchanged)
-                    continue;
+                if (entry.Entity is Audit || entry.State == EntityState.Detached || entry.State == EntityState.Unchanged)continue;
+
                 var auditEntry = new AuditEntry(entry);
                 auditEntry.TableName = entry.Entity.GetType().Name;
-                if (userClaimService == null)
-                {
-                    throw new Exception("UserClaimService is not initialized.");
-                }
-                if (httpContextAccessor.HttpContext == null)
-                {
-                    throw new Exception("HttpContext is not available.");
-                }
-
                 auditEntry.IpAddress = userClaimService.GetCurrentUserIpAddress() ?? "Kullanıcı bulunamadı";
                 auditEntries.Add(auditEntry);
                 foreach (var property in entry.Properties)
