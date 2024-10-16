@@ -5,6 +5,7 @@ using BaseTemplate.Domain.Dtos.ExampleDtos;
 using BaseTemplate.Shared.Dtos.SystemDtos;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using BaseTemplate.Repository.Contexts;
 
 namespace BaseTemplate.Presentation.Controllers
 {
@@ -13,7 +14,7 @@ namespace BaseTemplate.Presentation.Controllers
     {
         private readonly IExampleService _exampleService;
 
-        public ExampleController(IExampleService exampleService)
+        public ExampleController(IExampleService exampleService, ExampleContext exampleContext)
         {
             _exampleService = exampleService;
         }

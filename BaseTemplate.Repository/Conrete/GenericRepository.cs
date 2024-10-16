@@ -16,20 +16,20 @@ namespace BaseTemplate.Repository.Conrete
 {
     public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
     {
-        protected readonly ExampleContext db;
+        protected readonly ExampleContext _db;
 
-        public DbSet<T> Table => db.Set<T>();
+        public DbSet<T> Table => _db.Set<T>();
 
 
         public GenericRepository(ExampleContext db)
         {
-            this.db = db;
+            _db = db;
         }
 
         public virtual async Task<T> AddAsync(T model)
         {
-            db.Attach(model);
-            await db.AddAsync(model);
+            _db.Attach(model);
+            await _db.AddAsync(model);
             return model;
         }
 
@@ -37,7 +37,7 @@ namespace BaseTemplate.Repository.Conrete
         {
             try
             {
-                await db.AddRangeAsync(models);
+                await _db.AddRangeAsync(models);
                 return true;
             }
             catch (Exception e)
@@ -152,7 +152,7 @@ namespace BaseTemplate.Repository.Conrete
 
         public virtual T Update(T model)
         {
-            db.Update(model);
+            _db.Update(model);
             return model;
         }
 
@@ -170,11 +170,11 @@ namespace BaseTemplate.Repository.Conrete
         {
             try
             {
-                using (var transaction = db.Database.BeginTransaction())
+                using (var transaction = _db.Database.BeginTransaction())
                 {
                     try
                     {
-                        var changeCount = await db.SaveChangesAsync();
+                        var changeCount = await _db.SaveChangesAsync();
                         transaction.Commit();
                         return changeCount;
                     }

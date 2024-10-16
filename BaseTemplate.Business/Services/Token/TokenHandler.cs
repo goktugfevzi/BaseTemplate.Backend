@@ -16,18 +16,18 @@ namespace BaseTemplate.Business.Services.Token
 {
     public class TokenHandler : ITokenHandler
     {
-        private readonly IConfiguration configuration;
+        private readonly IConfiguration _configuration;
 
         public TokenHandler(IConfiguration configuration)
         {
-            this.configuration = configuration;
+            _configuration = configuration;
         }
         public TokenDto CreateAccessToken(User user)
         {
             TokenDto token = new();
-            SymmetricSecurityKey securityKey = new(Encoding.UTF8.GetBytes(configuration["Token:SecurityKey"]));
+            SymmetricSecurityKey securityKey = new(Encoding.UTF8.GetBytes(_configuration["Token:SecurityKey"]));
             SigningCredentials signingCredentials = new(securityKey, SecurityAlgorithms.HmacSha256);
-            token.Expiration = DateTime.UtcNow.AddMinutes(Convert.ToInt32(configuration["Token:LifeTime"]));
+            token.Expiration = DateTime.UtcNow.AddMinutes(Convert.ToInt32(_configuration["Token:LifeTime"]));
             var claims = new List<Claim>
                 {
                     new(ClaimTypes.Name, user.Name),
@@ -38,8 +38,8 @@ namespace BaseTemplate.Business.Services.Token
                 };
 
             JwtSecurityToken securityToken = new(
-                audience: configuration["Token:Audience"],
-                issuer: configuration["Token:Issuer"],
+                audience: _configuration["Token:Audience"],
+                issuer: _configuration["Token:Issuer"],
                 expires: token.Expiration,
                 notBefore: DateTime.UtcNow,
                 signingCredentials: signingCredentials,

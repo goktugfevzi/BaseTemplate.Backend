@@ -1,11 +1,11 @@
 version: '3.4'
 
 services:
-  basetemplate.presentation:
-  # backend:
-    image: basetemplate.presentation
-    # image: backend
-    # container_name: backend
+  # basetemplate.presentation:
+  backend:
+    # image: basetemplate.presentation
+    image: backend
+    container_name: backend
     build:
       context: ./BaseTemplate.Presentation/
       dockerfile: Dockerfile
@@ -25,7 +25,7 @@ services:
        ACCEPT_EULA: "Y"   
        MSSQL_SA_PASSWORD: "1Q2w3e4r5t6y!!"
     ports:
-      - "1433:1433"
+      - "1434:1433"
     volumes:
       - ./db/data:/var/opt/mssql/data
  

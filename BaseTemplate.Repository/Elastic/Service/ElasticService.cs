@@ -1,9 +1,13 @@
 ﻿using BaseTemplate.Domain.Entities;
 using BaseTemplate.Repository.Elastic.Abstraction;
 using BaseTemplate.Repository.Elastic.Configuration;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Nest;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace BaseTemplate.Repository.Elastic.Service
 {
@@ -12,12 +16,13 @@ namespace BaseTemplate.Repository.Elastic.Service
         private readonly IElasticClient _client;
         private readonly ElasticSettings _elasticSettings;
         private readonly IConfiguration _configuration;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-
-        public ElasticService(IOptions<ElasticSettings> elasticSettings, IConfiguration configuration)
+        public ElasticService(IOptions<ElasticSettings> elasticSettings, IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
         {
             _elasticSettings = elasticSettings.Value;
             _configuration = configuration;
+            _httpContextAccessor = httpContextAccessor;
             _elasticSettings.Url = _configuration["ElasticsSearchSettings:Url"];
             _elasticSettings.DefaultIndex = _configuration["ElasticsSearchSettings:DefaultIndex"];
 
@@ -25,14 +30,26 @@ namespace BaseTemplate.Repository.Elastic.Service
                 .DefaultIndex(_elasticSettings.DefaultIndex);
 
             _client = new ElasticClient(settings);
-            _configuration = configuration;
         }
 
         public async Task<bool> AddOrUpdateAudit(Audit audit)
         {
+            var userId = _httpContextAccessor.HttpContext?.User.Claims
+                            .FirstOrDefault(c => c.Type == "UserId")?.Value;
+
+            if (!string.IsNullOrEmpty(userId) && Guid.TryParse(userId, out Guid parsedUserId))
+            {
+                audit.UserId = parsedUserId;
+            }
+            else
+            {
+                audit.UserId = Guid.Empty; 
+            }
+
             var response = await _client.IndexDocumentAsync(audit);
             return response.IsValid;
         }
+
         public async Task CreateIndexIfNotExistsAsync(string indexName)
         {
             var existsResponse = await _client.Indices.ExistsAsync(indexName);

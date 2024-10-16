@@ -12,28 +12,29 @@ using System.Linq.Expressions;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using Nest;
 
 namespace BaseTemplate.Business.Services
 {
     public class GenericService<T> : IGenericService<T> where T : BaseEntity
     {
-        private readonly IGenericRepository<T> genericRepository;
-        private readonly IMapper mapper;
+        private readonly IGenericRepository<T> _genericRepository;
+        private readonly IMapper _mapper;
 
         public GenericService(IGenericRepository<T> genericRepository, IMapper mapper)
         {
-            this.genericRepository = genericRepository;
-            this.mapper = mapper;
+            _genericRepository = genericRepository;
+            _mapper = mapper;
         }
         public virtual async Task<ServiceResult<Tres>> AddAsync<Treq, Tres>(Treq reqDto, bool? isEmptyResponse = false)
         {
             try
             {
-                var entity = mapper.Map<T>(reqDto);
-                var addedEntity = await genericRepository.AddAsync(entity);
-                await genericRepository.SaveAsync();
-                var result = isEmptyResponse.Value ? Activator.CreateInstance<Tres>() : mapper.Map<Tres>(entity);
-                return ServiceResult<Tres>.Success((int)HttpStatusCode.Created, result);
+                var entity = _mapper.Map<T>(reqDto);
+                var addedEntity = await _genericRepository.AddAsync(entity);
+                await _genericRepository.SaveAsync();
+                var result = isEmptyResponse.Value ? Activator.CreateInstance<Tres>() : _mapper.Map<Tres>(entity);
+                return ServiceResult<Tres>.Success((int)HttpStatusCode.Created, result,1);
             }
             catch (Exception e)
             {
@@ -45,11 +46,11 @@ namespace BaseTemplate.Business.Services
         {
             try
             {
-                var entities = mapper.Map<List<T>>(reqListDto);
-                var addedEntities = await genericRepository.AddAsync(entities);
-                await genericRepository.SaveAsync();
-                var result = isEmptyResponse.Value ? Activator.CreateInstance<List<Tres>>() : mapper.Map<List<Tres>>(entities);
-                return ServiceResult<List<Tres>>.Success((int)HttpStatusCode.Created, result);
+                var entities = _mapper.Map<List<T>>(reqListDto);
+                var addedEntities = await _genericRepository.AddAsync(entities);
+                await _genericRepository.SaveAsync();
+                var result = isEmptyResponse.Value ? Activator.CreateInstance<List<Tres>>() : _mapper.Map<List<Tres>>(entities);
+                return ServiceResult<List<Tres>>.Success((int)HttpStatusCode.Created, result,result.Count);
             }
             catch (Exception e)
             {
@@ -59,103 +60,103 @@ namespace BaseTemplate.Business.Services
 
         public virtual async Task<ServiceResult<List<Tres>>> GetAllAsync<Tres>(bool? tracking = false)
         {
-            var entities = await genericRepository.GetAll(tracking.Value).OrderBy(x => x.Id).ToListAsync();
-            return ServiceResult<List<Tres>>.Success((int)HttpStatusCode.OK, mapper.Map<List<Tres>>(entities));
+            var entities = await _genericRepository.GetAll(tracking.Value).OrderBy(x => x.Id).ToListAsync();
+            return ServiceResult<List<Tres>>.Success((int)HttpStatusCode.OK, _mapper.Map<List<Tres>>(entities),entities.Count);
         }
 
         public virtual async Task<ServiceResult<List<T>>> GetAllAsync(bool? tracking = false)
         {
-            var entities = await genericRepository.GetAll(tracking.Value).OrderBy(x => x.Id).ToListAsync();
-            return ServiceResult<List<T>>.Success((int)HttpStatusCode.OK, entities);
+            var entities = await _genericRepository.GetAll(tracking.Value).OrderBy(x => x.Id).ToListAsync();
+            return ServiceResult<List<T>>.Success((int)HttpStatusCode.OK, entities, entities.Count());
         }
 
         public virtual async Task<ServiceResult<List<Tres>>> GetAllAsync<Tres>(Expression<Func<T, bool>> expression, bool? tracking = false)
         {
-            var entities = await genericRepository.GetAll(expression, tracking.Value).ToListAsync();
-            return ServiceResult<List<Tres>>.Success((int)HttpStatusCode.OK, mapper.Map<List<Tres>>(entities));
+            var entities = await _genericRepository.GetAll(expression, tracking.Value).ToListAsync();
+            return ServiceResult<List<Tres>>.Success((int)HttpStatusCode.OK, _mapper.Map<List<Tres>>(entities), entities.Count());
         }
 
         public virtual async Task<ServiceResult<List<T>>> GetAllAsync(Expression<Func<T, bool>> expression, bool? tracking, params Expression<Func<T, object>>[] includeExpression)
         {
-            var queryable = genericRepository.GetAll(expression, tracking.Value, includeExpression);
-            return ServiceResult<List<T>>.Success((int)HttpStatusCode.OK, await queryable.ToListAsync());
+            var queryable = _genericRepository.GetAll(expression, tracking.Value, includeExpression);
+            return ServiceResult<List<T>>.Success((int)HttpStatusCode.OK, await queryable.ToListAsync(),queryable.Count());
         }
 
         public virtual async Task<ServiceResult<List<Tres>>> GetAllAsync<Tres>(Expression<Func<T, bool>> expression, bool? tracking, params Expression<Func<T, object>>[] includeExpression)
         {
-            var queryable = genericRepository.GetAll(expression, tracking.Value, includeExpression);
-            return ServiceResult<List<Tres>>.Success((int)HttpStatusCode.OK, mapper.Map<List<Tres>>(await queryable.ToListAsync()));
+            var queryable = _genericRepository.GetAll(expression, tracking.Value, includeExpression);
+            return ServiceResult<List<Tres>>.Success((int)HttpStatusCode.OK, _mapper.Map<List<Tres>>(await queryable.ToListAsync()), queryable.Count());
         }
 
         public virtual async Task<ServiceResult<PagingResult<Tres>>> GetAllPagingAsync<Tres>(PagingRequest pagingRequest)
         {
-            var entities = await genericRepository.GetAll(pagingRequest.IsTracking).ToPagedListAsync(pagingRequest.PageNumber, pagingRequest.PageSize, pagingRequest.OrderByName);
-            return ServiceResult<PagingResult<Tres>>.Success((int)HttpStatusCode.OK, mapper.Map<PagingResult<Tres>>(entities));
+            var entities = await _genericRepository.GetAll(pagingRequest.IsTracking).ToPagedListAsync(pagingRequest.PageNumber, pagingRequest.PageSize, pagingRequest.OrderByName);
+            return ServiceResult<PagingResult<Tres>>.Success((int)HttpStatusCode.OK, _mapper.Map<PagingResult<Tres>>(entities), entities.TotalPagesCount);
         }
 
         public virtual async Task<ServiceResult<PagingResult<Tres>>> GetAllPagingAsync<Tres>(Expression<Func<T, bool>> expression, PagingRequest pagingRequest)
         {
-            var entities = await genericRepository.GetAll(expression, pagingRequest.IsTracking).ToPagedListAsync(pagingRequest.PageNumber, pagingRequest.PageSize, pagingRequest.OrderByName);
-            return ServiceResult<PagingResult<Tres>>.Success((int)HttpStatusCode.OK, mapper.Map<PagingResult<Tres>>(entities));
+            var entities = await _genericRepository.GetAll(expression, pagingRequest.IsTracking).ToPagedListAsync(pagingRequest.PageNumber, pagingRequest.PageSize, pagingRequest.OrderByName);
+            return ServiceResult<PagingResult<Tres>>.Success((int)HttpStatusCode.OK, _mapper.Map<PagingResult<Tres>>(entities), entities.TotalPagesCount);
         }
 
         public async Task<ServiceResult<PagingResult<Tres>>> GetAllPagingAsync<Tres>(Expression<Func<T, bool>> expression, PagingRequest pagingRequest, params Expression<Func<T, object>>[] includeParams)
         {
-            var entities = await genericRepository.GetAll(expression, pagingRequest.IsTracking, includeParams).ToPagedListAsync(pagingRequest.PageNumber, pagingRequest.PageSize, pagingRequest.OrderByName);
-            return ServiceResult<PagingResult<Tres>>.Success((int)HttpStatusCode.OK, mapper.Map<PagingResult<Tres>>(entities));
+            var entities = await _genericRepository.GetAll(expression, pagingRequest.IsTracking, includeParams).ToPagedListAsync(pagingRequest.PageNumber, pagingRequest.PageSize, pagingRequest.OrderByName);
+            return ServiceResult<PagingResult<Tres>>.Success((int)HttpStatusCode.OK, _mapper.Map<PagingResult<Tres>>(entities), entities.TotalPagesCount);
         }
 
         public virtual async Task<ServiceResult<Tres>> GetByIdAsync<Tres>(string id, bool? tracking = false)
         {
-            var entity = await genericRepository.GetByIdAsync(id, tracking.Value);
-            return ServiceResult<Tres>.Success((int)HttpStatusCode.OK, mapper.Map<Tres>(entity));
+            var entity = await _genericRepository.GetByIdAsync(id, tracking.Value);
+            return ServiceResult<Tres>.Success((int)HttpStatusCode.OK, _mapper.Map<Tres>(entity),1);
         }
 
         public virtual async Task<ServiceResult<T>> GetByIdAsync(string id, bool? tracking = false)
         {
-            var entity = await genericRepository.GetByIdAsync(id, tracking.Value);
-            return ServiceResult<T>.Success((int)HttpStatusCode.OK, entity);
+            var entity = await _genericRepository.GetByIdAsync(id, tracking.Value);
+            return ServiceResult<T>.Success((int)HttpStatusCode.OK, entity, 1);
         }
 
         public async Task<ServiceResult<T>> GetByIdAsync(string id, bool? tracking = false, params Expression<Func<T, object>>[] includeExpression)
         {
-            var entity = await genericRepository.GetByIdAsync(id, tracking.Value, includeExpression);
-            return ServiceResult<T>.Success((int)HttpStatusCode.OK, entity);
+            var entity = await _genericRepository.GetByIdAsync(id, tracking.Value, includeExpression);
+            return ServiceResult<T>.Success((int)HttpStatusCode.OK, entity, 1);
         }
 
         public virtual async Task<ServiceResult<Tres>> GetFirstAsync<Tres>(Expression<Func<T, bool>> expression, bool? tracking = false)
         {
-            var entity = await genericRepository.GetAll(expression, tracking.Value).FirstOrDefaultAsync();
-            return ServiceResult<Tres>.Success((int)HttpStatusCode.OK, mapper.Map<Tres>(entity));
+            var entity = await _genericRepository.GetAll(expression, tracking.Value).FirstOrDefaultAsync();
+            return ServiceResult<Tres>.Success((int)HttpStatusCode.OK, _mapper.Map<Tres>(entity), 1);
         }
 
         public virtual async Task<ServiceResult<T>> GetFirstAsync(Expression<Func<T, bool>> expression, bool? tracking = false)
         {
-            var entity = await genericRepository.GetSingleAsync(expression, tracking.Value);
-            return ServiceResult<T>.Success((int)HttpStatusCode.OK, entity);
+            var entity = await _genericRepository.GetSingleAsync(expression, tracking.Value);
+            return ServiceResult<T>.Success((int)HttpStatusCode.OK, entity, 1);
         }
 
         public async Task<ServiceResult<Tres>> GetFirstAsync<Tres>(Expression<Func<T, bool>> expression, bool? tracking = false, params Expression<Func<T, object>>[] includeExpression)
         {
-            var entity = await genericRepository.GetSingleAsync(expression, tracking.Value, includeExpression);
-            return ServiceResult<Tres>.Success((int)HttpStatusCode.OK, mapper.Map<Tres>(entity));
+            var entity = await _genericRepository.GetSingleAsync(expression, tracking.Value, includeExpression);
+            return ServiceResult<Tres>.Success((int)HttpStatusCode.OK, _mapper.Map<Tres>(entity), 1);
         }
 
         public async Task<ServiceResult<T>> GetFirstAsync(Expression<Func<T, bool>> expression, bool? tracking = false, params Expression<Func<T, object>>[] includeExpression)
         {
-            var entity = await genericRepository.GetSingleAsync(expression, tracking.Value, includeExpression);
-            return ServiceResult<T>.Success((int)HttpStatusCode.OK, entity);
+            var entity = await _genericRepository.GetSingleAsync(expression, tracking.Value, includeExpression);
+            return ServiceResult<T>.Success((int)HttpStatusCode.OK, entity, 1);
         }
 
         public virtual async Task<ServiceResult<Tres>> RemoveAsync<Tres>(string id, bool? isEmptyResponse = false)
         {
             try
             {
-                var entity = await genericRepository.GetByIdAsync(id);
-                genericRepository.Remove(entity);
-                await genericRepository.SaveAsync();
-                var result = isEmptyResponse.Value ? Activator.CreateInstance<Tres>() : mapper.Map<Tres>(entity);
-                return ServiceResult<Tres>.Success((int)HttpStatusCode.OK, result);
+                var entity = await _genericRepository.GetByIdAsync(id);
+                _genericRepository.Remove(entity);
+                await _genericRepository.SaveAsync();
+                var result = isEmptyResponse.Value ? Activator.CreateInstance<Tres>() : _mapper.Map<Tres>(entity);
+                return ServiceResult<Tres>.Success((int)HttpStatusCode.OK, result, 1);
             }
             catch (Exception e)
             {
@@ -167,8 +168,8 @@ namespace BaseTemplate.Business.Services
         {
             try
             {
-                var entity = await genericRepository.SetToPassiveAsync(id);
-                await genericRepository.SaveAsync();
+                var entity = await _genericRepository.SetToPassiveAsync(id);
+                await _genericRepository.SaveAsync();
                 Tres result;
                 if (typeof(Tres) == typeof(NoContentDto))
                 {
@@ -176,9 +177,9 @@ namespace BaseTemplate.Business.Services
                 }
                 else
                 {
-                    result = isEmptyResponse.Value ? Activator.CreateInstance<Tres>() : mapper.Map<Tres>(entity);
+                    result = isEmptyResponse.Value ? Activator.CreateInstance<Tres>() : _mapper.Map<Tres>(entity);
                 }
-                return ServiceResult<Tres>.Success((int)HttpStatusCode.OK, result);
+                return ServiceResult<Tres>.Success((int)HttpStatusCode.OK, result, 1);
             }
             catch (Exception e)
             {
@@ -190,12 +191,12 @@ namespace BaseTemplate.Business.Services
         {
             try
             {
-                var entity = await genericRepository.GetByIdAsync(id, true);
-                var mappedEntity = mapper.Map(reqDto, entity);
-                genericRepository.Update(mappedEntity);
-                await genericRepository.SaveAsync();
-                var result = isEmptyResponse.Value ? Activator.CreateInstance<Tres>() : mapper.Map<Tres>(entity);
-                return ServiceResult<Tres>.Success((int)HttpStatusCode.OK, result);
+                var entity = await _genericRepository.GetByIdAsync(id, true);
+                var mappedEntity = _mapper.Map(reqDto, entity);
+                _genericRepository.Update(mappedEntity);
+                await _genericRepository.SaveAsync();
+                var result = isEmptyResponse.Value ? Activator.CreateInstance<Tres>() : _mapper.Map<Tres>(entity);
+                return ServiceResult<Tres>.Success((int)HttpStatusCode.OK, result, 1);
             }
             catch (Exception e)
             {
@@ -210,14 +211,14 @@ namespace BaseTemplate.Business.Services
                 List<T> entityList = new();
                 foreach (var item in reqDto)
                 {
-                    var entity = await genericRepository.GetByIdAsync((item as PrimaryDto<Guid>).Id.ToString());
-                    var mappedEntity = mapper.Map(reqDto, entity);
+                    var entity = await _genericRepository.GetByIdAsync((item as PrimaryDto<Guid>).Id.ToString());
+                    var mappedEntity = _mapper.Map(reqDto, entity);
                     entityList.Add(mappedEntity);
                 }
-                genericRepository.Update(entityList);
-                await genericRepository.SaveAsync();
-                var result = isEmptyResponse.Value ? Activator.CreateInstance<List<Tres>>() : mapper.Map<List<Tres>>(entityList);
-                return ServiceResult<List<Tres>>.Success((int)HttpStatusCode.OK, result);
+                _genericRepository.Update(entityList);
+                await _genericRepository.SaveAsync();
+                var result = isEmptyResponse.Value ? Activator.CreateInstance<List<Tres>>() : _mapper.Map<List<Tres>>(entityList);
+                return ServiceResult<List<Tres>>.Success((int)HttpStatusCode.OK, result,result.Count);
             }
             catch (Exception e)
             {

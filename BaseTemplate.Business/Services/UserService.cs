@@ -14,14 +14,14 @@ namespace BaseTemplate.Business.Services
 {
     public class UserService : GenericService<User>, IUserService
     {
-        private readonly IConfiguration configuration;
+        private readonly IConfiguration _configuration;
         private readonly IUserRepository _userRepository;
         private readonly IPasswordHasherService _passwordHasher;
         private readonly ITokenHandler _tokenHandler;
 
         public UserService(IGenericRepository<User> genericRepository, IMapper mapper, IConfiguration configuration, ITokenHandler tokenHandler, IPasswordHasherService passwordHasher, IUserRepository userRepository) : base(genericRepository, mapper)
         {
-            this.configuration = configuration;
+            _configuration = configuration;
             _tokenHandler = tokenHandler;
             _passwordHasher = passwordHasher;
             _userRepository = userRepository;
@@ -74,7 +74,7 @@ namespace BaseTemplate.Business.Services
 
             var refreshToken = _tokenHandler.CreateRefreshToken();
             user.RefreshToken = refreshToken;
-            user.RefreshTokenEndDate = DateTime.UtcNow.AddMinutes(Convert.ToInt32(configuration["Token:LifeTime"]) + Convert.ToInt32(configuration["Token:RefreshTokenExtraTime"]));
+            user.RefreshTokenEndDate = DateTime.UtcNow.AddMinutes(Convert.ToInt32(_configuration["Token:LifeTime"]) + Convert.ToInt32(_configuration["Token:RefreshTokenExtraTime"]));
 
             await _userRepository.AddAsync(user);
             await _userRepository.SaveAsync();
@@ -109,7 +109,7 @@ namespace BaseTemplate.Business.Services
         public async Task UpdateRefreshTokenAsync(User user, TokenDto token)
         {
             user.RefreshToken = token.RefreshToken;
-            user.RefreshTokenEndDate = DateTime.UtcNow.AddMinutes(Convert.ToInt32(configuration["Token:LifeTime"]) + Convert.ToInt32(configuration["Token:RefreshTokenExtraTime"]));
+            user.RefreshTokenEndDate = DateTime.UtcNow.AddMinutes(Convert.ToInt32(_configuration["Token:LifeTime"]) + Convert.ToInt32(_configuration["Token:RefreshTokenExtraTime"]));
             _userRepository.Update(user);
             await _userRepository.SaveAsync();
         }

@@ -140,19 +140,11 @@ app.UseCustomException();
 
 app.UseRateLimiter();
 
-app.UseAuthorization();
+app.UseMiddleware<UserLoggingMiddleware>();
 
 app.UseAuthorization();
 
-app.Use(async (context, next) =>
-{
-    var userName = context.User?.Identity?.IsAuthenticated != null || true ? context.User.Identity.Name : null;
-    var userId = context.User.Claims.Where(x => x.Type == "UserId").Select(x => x.Value).FirstOrDefault();
-    LogContext.PushProperty("UserName", userName);
-    if (!string.IsNullOrEmpty(userId))
-        LogContext.PushProperty("UserId", userId);
-    await next();
-});
+app.UseAuthorization();
 
 app.UseSerilogRequestLogging();
 

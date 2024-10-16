@@ -10,16 +10,16 @@ namespace BaseTemplate.Shared.Services
 {
     public class UserClaimService : IUserClaimService
     {
-        private readonly IHttpContextAccessor httpContextAccessor;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
         public UserClaimService(IHttpContextAccessor httpContextAccessor)
         {
-            this.httpContextAccessor = httpContextAccessor;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public Guid GetCurrentUserId()
         {
-            var userId = httpContextAccessor.HttpContext?.User?.Claims?.FirstOrDefault(x => x.Type.Equals("UserId"));
+            var userId = _httpContextAccessor.HttpContext?.User?.Claims?.FirstOrDefault(x => x.Type.Equals("UserId"));
             if (userId is not null)
                 return Guid.Parse(userId.Value);
             else
@@ -28,7 +28,7 @@ namespace BaseTemplate.Shared.Services
 
         public string GetCurrentUserIpAddress()
         {
-            var context = httpContextAccessor.HttpContext;
+            var context = _httpContextAccessor.HttpContext;
             if (context == null)
             {
                 return "HttpContext mevcut değil";
