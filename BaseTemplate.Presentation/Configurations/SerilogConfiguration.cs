@@ -5,35 +5,25 @@ using System;
 
 namespace BaseTemplate.Presentation.Configurations
 {
-    public class SerilogConfiguration
+    public static class SerilogConfiguration
     {
-        private readonly IConfiguration _configuration;
-
-        public SerilogConfiguration(IConfiguration configuration)
+        public static ElasticsearchSinkOptions GetElasticsearchOptions(IConfiguration configuration)
         {
-            _configuration = configuration;
-        }
-
-        public ElasticsearchSinkOptions ElasticsearchOptions
-        {
-            get
+            var uri = configuration["ElasticsSearchSettings:Url"];
+            return new ElasticsearchSinkOptions(new Uri(uri))
             {
-                var uri = _configuration["ElasticsSearchSettings:Url"];
-                return new ElasticsearchSinkOptions(new Uri(uri))
-                {
-                    AutoRegisterTemplate = true,
-                    IndexFormat = $"Serilog-{DateTime.UtcNow:yyyy.MM.dd}",
-                    NumberOfShards = 2,
-                    NumberOfReplicas = 1
-                };
-            }
+                AutoRegisterTemplate = true,
+                IndexFormat = $"Serilog-{DateTime.UtcNow:yyyy.MM.dd}",
+                NumberOfShards = 2,
+                NumberOfReplicas = 1
+            };
         }
 
-        public LoggerConfiguration ConfigureLogging()
+        public static LoggerConfiguration ConfigureLogging(IConfiguration configuration)
         {
             return new LoggerConfiguration()
                 .WriteTo.Console(restrictedToMinimumLevel: Serilog.Events.LogEventLevel.Information)
-                .WriteTo.Elasticsearch(ElasticsearchOptions)
+                .WriteTo.Elasticsearch(GetElasticsearchOptions(configuration))
                 .Enrich.FromLogContext()
                 .MinimumLevel.Warning();
         }

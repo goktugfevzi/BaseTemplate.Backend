@@ -29,6 +29,7 @@ using BaseTemplate.Repository.Elastic.Configuration;
 using BaseTemplate.Shared.Abstractions;
 using BaseTemplate.Shared.Services;
 
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
@@ -37,79 +38,18 @@ builder.Services.RegisterRepositoryServices(builder.Configuration);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddHealthChecks();
 builder.Services.AddHttpContextAccessor();
-builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
-builder.Host.ConfigureContainer<ContainerBuilder>(containerBuilder => containerBuilder.RegisterModule(new RepoServiceModule()));
-
-
 builder.Services.Configure<ApiBehaviorOptions>(o =>
 {
     o.SuppressModelStateInvalidFilter = true;
 });
+builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
+builder.Host.ConfigureContainer<ContainerBuilder>(containerBuilder => containerBuilder.RegisterModule(new RepoServiceModule()));
+builder.Host.UseSerilog(SerilogConfiguration.ConfigureLogging(builder.Configuration).CreateLogger());
+builder.Services.AddRateLimiter();
+builder.Services.AddJwtConfiguration(builder.Configuration);
+builder.Services.AddSwaggerSettings();
 
-builder.Services.AddRateLimiter(o =>
-{
-    o.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
-    o.AddFixedWindowLimiter(
-        "Fixed",
-        c =>
-        {
-            c.Window = TimeSpan.FromSeconds(5);
-            c.PermitLimit = 1;
-            c.QueueLimit = 5;
-            c.QueueProcessingOrder = System.Threading.RateLimiting.QueueProcessingOrder.OldestFirst;
-        });
-});
-builder.Services.Configure<ElasticSettings>(builder.Configuration.GetSection("Elasticsearch"));
-var serilogConfig = new SerilogConfiguration(builder.Configuration);
-Logger log = serilogConfig.ConfigureLogging().CreateLogger();
 
-builder.Host.UseSerilog(log);
-
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(opt =>
-{
-    opt.TokenValidationParameters = new()
-    {
-        ValidateAudience = true,
-        ValidateIssuer = true,
-        ValidateLifetime = true,
-        ValidateIssuerSigningKey = true,
-
-        ValidAudience = builder.Configuration["Token:Audience"],
-        ValidIssuer = builder.Configuration["Token:Issuer"],
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Token:SecurityKey"])),
-        LifetimeValidator = (notBefore, expires, securityToken, validationParamters) => expires != null ? expires > DateTime.UtcNow : false,
-
-        NameClaimType = ClaimTypes.Name
-    };
-});
-builder.Services.AddSwaggerGen(c =>
-{
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "BaseTemplate API", Version = "v1", Description = "BaseTemplate APIs" });
-    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
-    {
-        Name = "Authorization",
-        Type = SecuritySchemeType.Http,
-        Scheme = "Bearer",
-        BearerFormat = "JWT",
-        In = ParameterLocation.Header,
-        Description = "Please enter only token"
-    });
-    c.AddSecurityRequirement(new OpenApiSecurityRequirement()
-    {
-        {
-            new OpenApiSecurityScheme
-            {
-                Reference = new OpenApiReference
-                {
-                    Type = ReferenceType.SecurityScheme,
-                    Id= "Bearer"
-                }
-            },
-            Array.Empty<string>()
-        }
-
-    });
-});
 var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
