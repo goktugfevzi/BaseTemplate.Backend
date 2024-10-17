@@ -1,6 +1,7 @@
 ﻿using BaseTemplate.Domain.Entities;
 using BaseTemplate.Repository.Elastic.Abstraction;
 using BaseTemplate.Repository.Elastic.Configuration;
+using BaseTemplate.Shared.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;

@@ -1,4 +1,5 @@
 ﻿using BaseTemplate.Domain.Entities;
+using BaseTemplate.Shared.Entities;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

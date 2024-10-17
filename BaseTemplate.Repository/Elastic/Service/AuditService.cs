@@ -3,6 +3,7 @@ using BaseTemplate.Domain.Entities.Common;
 using BaseTemplate.Repository.Elastic.Abstraction;
 using BaseTemplate.Shared.Abstractions;
 using BaseTemplate.Shared.Dtos.AuditDtos;
+using BaseTemplate.Shared.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 

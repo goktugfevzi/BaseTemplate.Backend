@@ -1,4 +1,4 @@
-﻿namespace BaseTemplate.Domain.Entities
+﻿namespace BaseTemplate.Shared.Entities
 {
     public class Audit
     {

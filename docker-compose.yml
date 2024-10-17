@@ -1,9 +1,7 @@
 version: '3.4'
 
 services:
-  # basetemplate.presentation:
   backend:
-    # image: basetemplate.presentation
     image: backend
     container_name: backend
     build:

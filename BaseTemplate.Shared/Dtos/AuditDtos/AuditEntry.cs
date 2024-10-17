@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using BaseTemplate.Shared.Entities;
 
 namespace BaseTemplate.Shared.Dtos.AuditDtos
 {
