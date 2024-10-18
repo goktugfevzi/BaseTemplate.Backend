@@ -30,6 +30,7 @@ namespace BaseTemplate.Presentation.Controllers
         [NoNeedAuthorization]
         public async Task<IActionResult> Login(LoginRequestDto loginDto)
         {
+
             return CreateActionResult(await _userService.LoginAsync(loginDto));
 
         }

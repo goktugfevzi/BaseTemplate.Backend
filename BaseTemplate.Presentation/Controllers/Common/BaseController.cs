@@ -8,6 +8,7 @@ namespace BaseTemplate.Presentation.Controllers.Common
     [ApiController]
     public class BaseController : ControllerBase
     {
+
         [NonAction]
         public IActionResult CreateActionResult<T>(ServiceResult<T> response)
         {
@@ -22,5 +23,8 @@ namespace BaseTemplate.Presentation.Controllers.Common
                 StatusCode = response.StatusCode
             };
         }
+    
+    
     }
+
 }

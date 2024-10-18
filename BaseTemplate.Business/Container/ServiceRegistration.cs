@@ -12,6 +12,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using FluentValidation.AspNetCore;
 
 namespace BaseTemplate.Business.Container
 {
@@ -22,6 +23,9 @@ namespace BaseTemplate.Business.Container
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
             services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+            services.AddFluentValidationAutoValidation();
+            services.AddFluentValidationClientsideAdapters();
+
             services.AddMemoryCache();
         }
     }

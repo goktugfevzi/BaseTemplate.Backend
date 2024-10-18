@@ -19,6 +19,7 @@ namespace BaseTemplate.Presentation.Middlewares
                     {
                         ClientSideException => 400,
                         UnauthorizedAccessException => 401,
+                        System.InvalidOperationException => 495,
                         _ => 500
                     };
 

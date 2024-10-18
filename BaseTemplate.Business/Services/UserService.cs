@@ -34,7 +34,7 @@ namespace BaseTemplate.Business.Services
 
             if (user == null || _passwordHasher.VerifyPassword(loginDto.Password, user.PasswordHash))
             {
-                return ServiceResult<LoginResponseDto>.Fail(400, "Invalid email or password");
+                return ServiceResult<LoginResponseDto>.Fail(400, "Kullanıcı adı veya şifre hatalı");
             }
 
             var token = _tokenHandler.CreateAccessToken(user);
