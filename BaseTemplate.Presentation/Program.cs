@@ -22,14 +22,10 @@ builder.Services.AddControllers(
     .ConfigureApiBehaviorOptions(o => o.SuppressModelStateInvalidFilter = true)
     .AddJsonOptions(o => o.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
-builder.Services.Configure<ApiBehaviorOptions>(o =>
-{
-    o.SuppressModelStateInvalidFilter = true;
-});
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddHealthChecks();
 builder.Services.AddHttpContextAccessor();
-
 
 builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
 builder.Host.ConfigureContainer<ContainerBuilder>(containerBuilder => containerBuilder.RegisterModule(new RepoServiceModule()));
@@ -41,7 +37,6 @@ builder.Services.AddRateLimiter();
 builder.Services.AddJwtConfiguration(builder.Configuration);
 builder.Services.AddSwaggerSettings();
 
-builder.Services.AddScoped<ExceptionHandlingMiddleware>();
 var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
@@ -53,6 +48,8 @@ using (var scope = app.Services.CreateScope())
     }
     catch (Exception ex)
     {  // Loglama veya hata yönetimi
+        var logger = services.GetRequiredService<ILogger<Program>>();
+        logger.LogError(ex, "Update-Database yapamadım.");
     }
 }
 if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
@@ -72,8 +69,7 @@ app.UseCustomException();
 
 app.UseRateLimiter();
 
-app.UseMiddleware<UserLoggingMiddleware>();
-//app.UseMiddleware<ExceptionHandlingMiddleware>();
+app.UseMiddleware<UserInfoMiddleware>();
 
 app.UseAuthorization();
 

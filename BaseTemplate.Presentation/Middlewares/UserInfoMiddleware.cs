@@ -5,11 +5,11 @@ using System.Threading.Tasks;
 
 namespace BaseTemplate.Presentation.Middlewares
 {
-    public class UserLoggingMiddleware
+    public class UserInfoMiddleware
     {
         private readonly RequestDelegate _next;
 
-        public UserLoggingMiddleware(RequestDelegate next)
+        public UserInfoMiddleware(RequestDelegate next)
         {
             _next = next;
         }

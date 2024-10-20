@@ -14,7 +14,7 @@ namespace BaseTemplate.Business.ValidationRules.FluentValidation
         public UserValidator()
         {
             RuleFor(x => x.Username).NotEmpty().WithMessage("Kullanıcı Adı alanı boş olamaz.");
-            RuleFor(x => x.Password).NotEmpty().MinimumLength(3).WithMessage("Şifre Alanı boş olamaz ve en az 3 karakter olmalı");
+            RuleFor(x => x.Password).NotEmpty().WithMessage("Şifre Alanı boş olamaz.").MinimumLength(3).WithMessage("Şifre en az 3 karakter olmalıdır.");
         }
     }
 }

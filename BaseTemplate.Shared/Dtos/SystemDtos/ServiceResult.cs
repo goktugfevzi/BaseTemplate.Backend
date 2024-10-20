@@ -17,7 +17,7 @@ namespace BaseTemplate.Shared.Dtos.SystemDtos
 
         public List<string> Errors { get; set; }
 
-        public int TotalItemCount { get; set; }
+        public int? TotalItemCount { get; set; }
 
         public static ServiceResult<T> Success(int statusCode, T data, int totalItemCount)
         {
