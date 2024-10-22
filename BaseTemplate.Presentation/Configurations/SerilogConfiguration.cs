@@ -25,7 +25,7 @@ namespace BaseTemplate.Presentation.Configurations
                 .WriteTo.Console(restrictedToMinimumLevel: Serilog.Events.LogEventLevel.Information)
                 .WriteTo.Elasticsearch(GetElasticsearchOptions(configuration))
                 .Enrich.FromLogContext()
-                .MinimumLevel.Warning();
+                .MinimumLevel.Information();
         }
     }
 }

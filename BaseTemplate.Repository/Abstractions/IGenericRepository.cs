@@ -34,5 +34,9 @@ namespace BaseTemplate.Repository.Abstractions
         Task<bool> RemoveAsync(Expression<Func<T, bool>> expression);
 
         Task<int> SaveAsync();
+
+        Task<bool> ExistAsync(Expression<Func<T, bool>> expression);
+        Task<bool> ExistAsync(List<Expression<Func<T, bool>>> expressions);
+
     }
 }

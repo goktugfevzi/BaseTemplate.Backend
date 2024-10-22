@@ -191,5 +191,22 @@ namespace BaseTemplate.Repository.Conrete
             }
         }
 
+        public virtual async Task<bool> ExistAsync(Expression<Func<T, bool>> expression)
+        {
+            return await Table.AnyAsync(expression);
+        }
+
+        public virtual async Task<bool> ExistAsync(List<Expression<Func<T, bool>>> expressions)
+        {
+            IQueryable<T> query = Table;
+
+            foreach (var expression in expressions)
+            {
+                query = query.Where(expression);
+            }
+
+            return await query.AnyAsync();
+        }
+
     }
 }

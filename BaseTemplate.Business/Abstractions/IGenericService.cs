@@ -35,5 +35,11 @@ namespace BaseTemplate.Business.Abstractions
         Task<ServiceResult<List<Tres>>> UpdateRangeAsync<Treq, Tres>(List<Treq> reqDto, bool? isEmptyResponse = false);
         Task<ServiceResult<Tres>> RemoveAsync<Tres>(string id, bool? isEmptyResponse = false);
         Task<ServiceResult<Tres>> SetToPassiveAsync<Tres>(string id, bool? isEmptyResponse = false);
+
+        Task<bool> ExistAsync(Expression<Func<Tentity, bool>> expression);
+
+        Task<bool> ExistAsync(List<Expression<Func<Tentity, bool>>> expressions);
+
+
     }
 }

@@ -1,11 +1,9 @@
 ﻿using BaseTemplate.Business.Abstractions;
+using BaseTemplate.Domain.Dtos.ExampleDtos;
 using BaseTemplate.Presentation.Attributes;
 using BaseTemplate.Presentation.Controllers.Common;
-using BaseTemplate.Domain.Dtos.ExampleDtos;
 using BaseTemplate.Shared.Dtos.SystemDtos;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using BaseTemplate.Repository.Contexts;
 
 namespace BaseTemplate.Presentation.Controllers
 {
@@ -14,7 +12,7 @@ namespace BaseTemplate.Presentation.Controllers
     {
         private readonly IExampleService _exampleService;
 
-        public ExampleController(IExampleService exampleService, ExampleContext exampleContext)
+        public ExampleController(IExampleService exampleService)
         {
             _exampleService = exampleService;
         }
@@ -23,7 +21,7 @@ namespace BaseTemplate.Presentation.Controllers
         [NoNeedAuthorization]
         public async Task<IActionResult> Example()
         {
-            return CreateActionResult(await _exampleService.GetAllAsync<GetExampleResponse>(x=>x.IsActive));
+            return CreateActionResult(await _exampleService.GetAllAsync<GetExampleResponse>(x => x.IsActive));
         }
         [HttpGet("{id}")]
         [NoNeedAuthorization]

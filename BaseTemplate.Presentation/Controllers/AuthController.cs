@@ -1,9 +1,7 @@
 ﻿using BaseTemplate.Business.Abstractions;
-using BaseTemplate.Business.Abstractions.Token;
 using BaseTemplate.Presentation.Attributes;
 using BaseTemplate.Presentation.Controllers.Common;
 using BaseTemplate.Shared.Dtos.LoginDtos;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BaseTemplate.Presentation.Controllers
