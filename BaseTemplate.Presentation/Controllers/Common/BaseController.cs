@@ -24,6 +24,16 @@ namespace BaseTemplate.Presentation.Controllers.Common
         [NonAction]
         public IActionResult CreateActionResult<T>(ServiceResult<T> response)
         {
+            if (response.StatusCode == 204)
+            {
+                _logger.LogInformation("Request Başarılı: {RequestPath}. Status Code: 204", HttpContext.Request.Path);
+                return new ObjectResult(null)
+                {
+                    StatusCode = response.StatusCode,
+                };
+            }
+
+
             if (response.StatusCode >= 400)
             {
                 var errorMessages = response.Errors != null && response.Errors.Any()
